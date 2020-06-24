@@ -34,13 +34,13 @@ lP={'f':1.33}
 uP={'f':1.83}
 cGame=Game(Thesis_Test_p1, Thesis_Test_p2, lP, uP)
 
-ineq_A= cGame.A_ineq()##cGame.A_ineq() 
+ineq_A= cGame.A_ineq()
 
 print(ineq_A)
 #ineq_A=cGame.A_ineq_RiskAverse(matchingPennies_p1_MarginalUtilities,matchingPennies_p2_MarginalUtilities)
 #ineq_A=cGame.A_ineq_gamble('','')
 
-c=cGame.c_gamble(lP,uP)
+c=cGame.c_gamble()
 print (c)
 cPolytope=Polytope(c, ineq_A, cGame.b_ineq(), cGame.A_eq(),cGame.b_eq())
 CEqui=cPolytope.minimize()

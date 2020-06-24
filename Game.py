@@ -201,10 +201,12 @@ class Game(object ):
                 
         return isNumeric
     
-    def c_gamble(self, lP, uP):
+    def c_gamble(self):
         #commonKnowledgeMatrix= self.A_ineq_gamble( lP, uP)     
         #print (commonKnowledgeMatrix)
         #return np.sum(commonKnowledgeMatrix, axis=0)
+        lP=self.LowerPrevisionsDict
+        uP=self.UpperPrevisionsDict
         player1PayoffMatrix= self.player1PayoffMatrix
         player2PayoffMatrix= self.player2PayoffMatrix
         m=self.m
