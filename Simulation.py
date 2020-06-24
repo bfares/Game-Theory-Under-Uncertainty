@@ -7,7 +7,6 @@ Created on Sun Mar 17 22:49:34 2019
 from Polytope import Polytope
 from Game import Game
 import numpy as np
-import mpl_toolkits.mplot3d as a3
 import matplotlib.pyplot as plt
 
 #Game examples
