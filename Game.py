@@ -5,6 +5,7 @@ Created on Sat Mar 16 07:50:49 2019
 @author: Bernard Fares
 """
 import numpy as np
+import math
 from collections import OrderedDict
 class Game(object ):
     player1PayoffMatrix=""
@@ -32,36 +33,28 @@ class Game(object ):
             for column in range(n):
                 print(player1PayoffMatrix[row][column],",",player2PayoffMatrix[row][column],"    ", end='')
             print(" ")
-    def c(self):
-        player1PayoffMatrix= self.player1PayoffMatrix
-        player2PayoffMatrix= self.player2PayoffMatrix
+    
+   
+    
+    def identity_A_ineq(self):
         m=self.m
         n=self.n
-        c=[]
-        # maximize matrix c
-        c=self.initConstraints()
-        for row in range (m): 
-            for column in range (n):
-                c[str(row)+str(column)] = player1PayoffMatrix[row][column] + player2PayoffMatrix[row][column] # sum of payoffs for both players
+        return np.identity(m*n)
+    
+    def identity_b_ineq(self):
+        m=self.m
+        n=self.n
+        return np.zeros(m*n)
+    
+    def CE_b_ineq(self):
+        m=self.m
+        n=self.n
+        return np.zeros(math.factorial(m) + math.factorial(n))
         
-        return np.array(list(c.values()))
-    
-    
-    
+        
     def b_ineq(self):
-        m=self.m
-        n=self.n
         
-        BLen=0
-        for row in range (m): 
-            for q in range (m):
-                if(row==q):
-                     continue 
-                BLen+=1
-        
-        #B = [[0] for i in range(m*n*2)]
-        B = [0 for i in range(2*BLen + m*n)]
-        return np.array(B)
+        return np.concatenate((self.CE_b_ineq(), self.identity_b_ineq()), axis=None)
     
     def A_eq(self):
         m=self.m
@@ -195,13 +188,13 @@ class Game(object ):
         isNumeric=True
              
         try:
-            val = float(input)
+             float(input)
         except ValueError:
             isNumeric=False
                 
         return isNumeric
     
-    def c_gamble(self):
+    def c(self):
         #commonKnowledgeMatrix= self.A_ineq_gamble( lP, uP)     
         #print (commonKnowledgeMatrix)
         #return np.sum(commonKnowledgeMatrix, axis=0)
