@@ -46,10 +46,10 @@ print("Game CE constraints: \n", cGame.CE_A_ineq())
 print ("\n Game objective function: \n",c)
 
 
-minimizeLP=Minimize(-1*c, -1*A_ineq, -1*b_ineq , A_eq,b_eq)
+minimizeLP=Minimize(-1*c, -1*A_ineq, -1*b_ineq , A_eq,b_eq, (0, 1))
 CEequi=minimizeLP.compute()
 print ("\n Game Correlated Equilibria: \n", CEequi)
-
+#print ("\n CE optimal expecation", minimizeLP.getRes().fun)
 cPolytope=Polytope(c, A_ineq, b_ineq , A_eq,b_eq)
 vertices=cPolytope.vertices()
 print ("\n Polytope Vertices: \n", vertices)
