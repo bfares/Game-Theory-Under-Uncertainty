@@ -5,79 +5,59 @@ Created on Sat Mar 16 07:50:49 2019
 @author: Bernard Fares
 """
 import numpy as np
+import math
 from collections import OrderedDict
 class Game(object ):
     player1PayoffMatrix=""
     player2PayoffMatrix=""
     LowerPrevisionsDict=""
     UpperPrevisionsDict=""
-    m=0
-    n=0
+    rows=0
+    cols=0
     def __init__(self, player1PayoffMatrix, player2PayoffMatrix, LowerPrevisionsDict=None, UpperPrevisionsDict=None):
         self.player1PayoffMatrix=player1PayoffMatrix
         self.player2PayoffMatrix=player2PayoffMatrix
         self.LowerPrevisionsDict=LowerPrevisionsDict
         self.UpperPrevisionsDict=UpperPrevisionsDict
-        self.m= int(len(player1PayoffMatrix))
-        self.n= int(len(player1PayoffMatrix[0]))
+        self.rows= int(len(player1PayoffMatrix))
+        self.cols= int(len(player1PayoffMatrix[0])) 
         
     
     def displayPayoff(self):
         player1PayoffMatrix= self.player1PayoffMatrix
         player2PayoffMatrix= self.player2PayoffMatrix
-        m=self.m
-        n=self.n
+        m=self.rows
+        n=self.cols
         
         for row in range (m):
             for column in range(n):
                 print(player1PayoffMatrix[row][column],",",player2PayoffMatrix[row][column],"    ", end='')
             print(" ")
-    def c(self):
-        player1PayoffMatrix= self.player1PayoffMatrix
-        player2PayoffMatrix= self.player2PayoffMatrix
-        m=self.m
-        n=self.n
-        c=[]
-        # maximize matrix c
-        c=self.initConstraints()
-        for row in range (m): 
-            for column in range (n):
-                c[str(row)+str(column)] = player1PayoffMatrix[row][column] + player2PayoffMatrix[row][column] # sum of payoffs for both players
-        
-        return np.array(list(c.values()))
+             
+    def b_ineq(self):   
+        return np.concatenate((self.CE_b_ineq(), self.identity_b_ineq()), axis=None)
     
+    def identity_b_ineq(self):
+        m=self.rows
+        n=self.cols
+        return np.zeros(m*n)
     
-    
-    def b_ineq(self):
-        m=self.m
-        n=self.n
-        
-        BLen=0
-        for row in range (m): 
-            for q in range (m):
-                if(row==q):
-                     continue 
-                BLen+=1
-        
-        #B = [[0] for i in range(m*n*2)]
-        B = [0 for i in range(2*BLen + m*n)]
-        return np.array(B)
-    
+    def CE_b_ineq(self):
+        m=self.rows
+        n=self.cols
+        return np.zeros(math.factorial(m) + math.factorial(n))
+            
     def A_eq(self):
-        m=self.m
-        n=self.n
-        #sigma x =1
-        constraints = [1 for i in range(m*n)]
-        A=[constraints]
-        return np.array(A)
+        m=self.rows
+        n=self.cols
+        return np.ones((1,m*n),dtype=int)
     
     def b_eq(self):
-        B=[1]
-        return np.array(B)
+        return np.array([1])
     
     def initConstraints(self):
-        m=self.m
-        n=self.n
+        m=self.rows
+        n=self.cols
         constraints=OrderedDict()
         for row in range (m):
             for column in range(n):
@@ -87,8 +67,8 @@ class Game(object ):
     def A_ineq_RiskAverse(self, P1_MarginalUtilitiesMatrix, P2_MarginalUtilitiesMatrix):
         player1PayoffMatrix= self.player1PayoffMatrix
         player2PayoffMatrix= self.player2PayoffMatrix
-        m=self.m
-        n=self.n
+        m=self.rows
+        n=self.cols
         A=[]
         
         #Player 1 constraints
@@ -119,13 +99,21 @@ class Game(object ):
                 A+=[list(constraints.values())]
         return np.array(A)
     
-    def A_ineq(self):
+    def A_ineq(self):     
+        return np.concatenate((self.CE_A_ineq(), self.identity_A_ineq()), axis=0)
+    
+    def identity_A_ineq(self):
+        m=self.rows
+        n=self.cols
+        return np.identity(m*n)
+    
+    def CE_A_ineq(self):
         player1PayoffMatrix= self.player1PayoffMatrix
         player2PayoffMatrix= self.player2PayoffMatrix
         lP=self.LowerPrevisionsDict
         uP=self.UpperPrevisionsDict
-        m=self.m
-        n=self.n
+        m=self.rows
+        n=self.cols
         A=[]
         
         #Player 1 constraints
@@ -182,33 +170,28 @@ class Game(object ):
                         
                      constraints[str(row)+str(column)]= float(player2Payoff) - float(player2Payoffk)             
                 A+=[list(constraints.values())] 
- 
-       #x>=0 constraints
-        for row in range (m):    
-            for column in range(n):
-                constraints=self.initConstraints()
-                constraints[str(row)+str(column)]= 1
-                A+=[list(constraints.values())]
         return np.array(A)
     
     def isNumber(self, input):
         isNumeric=True
              
         try:
-            val = float(input)
+             float(input)
         except ValueError:
             isNumeric=False
                 
         return isNumeric
     
-    def c_gamble(self, lP, uP):
+    def c(self):
         #commonKnowledgeMatrix= self.A_ineq_gamble( lP, uP)     
         #print (commonKnowledgeMatrix)
         #return np.sum(commonKnowledgeMatrix, axis=0)
+        lP=self.LowerPrevisionsDict
+        uP=self.UpperPrevisionsDict
         player1PayoffMatrix= self.player1PayoffMatrix
         player2PayoffMatrix= self.player2PayoffMatrix
-        m=self.m
-        n=self.n
+        m=self.rows
+        n=self.cols
         c=[]
         # maximize matrix c
         c=self.initConstraints()
