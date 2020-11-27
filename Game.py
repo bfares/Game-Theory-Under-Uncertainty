@@ -125,7 +125,7 @@ class Game(object ):
                 for column in range(n):
                     if not self.isNumber(player1PayoffMatrix[row][column]):                        
                         if player1PayoffMatrix[row][column].startswith('-'):
-                            player1Payoff= -uP[player1PayoffMatrix[row][column]]
+                            player1Payoff= -uP[player1PayoffMatrix[row][column][1:]]
                         else:
                             player1Payoff=lP[player1PayoffMatrix[row][column]]
                     else:
@@ -133,7 +133,7 @@ class Game(object ):
                     
                     if not self.isNumber(player1PayoffMatrix[q][column]):
                          if player1PayoffMatrix[q][column].startswith('-'):
-                            player1Payoffq= -lP[player1PayoffMatrix[q][column]]
+                            player1Payoffq= -lP[player1PayoffMatrix[q][column][1:]]
                          else:
                             player1Payoffq=uP[player1PayoffMatrix[q][column]]
                             
@@ -154,7 +154,7 @@ class Game(object ):
                      if not self.isNumber(player2PayoffMatrix[row][column]):  
                         
                         if player2PayoffMatrix[row][column].startswith('-'):
-                            player2Payoff= -uP[player2PayoffMatrix[row][column]]
+                            player2Payoff= -uP[player2PayoffMatrix[row][column][1:]]
                         else:
                             player2Payoff=lP[player2PayoffMatrix[row][column]]
                      else:
@@ -162,7 +162,7 @@ class Game(object ):
                     
                      if not self.isNumber(player2PayoffMatrix[row][k]):
                          if player2PayoffMatrix[row][k].startswith('-'):
-                            player2Payoffk= -lP[player2PayoffMatrix[row][k]]
+                            player2Payoffk= -lP[player2PayoffMatrix[row][k][1:]]
                          else:
                             player2Payoffk=uP[player2PayoffMatrix[row][k]]
                      else:
@@ -199,7 +199,7 @@ class Game(object ):
             for column in range (n):
                 if not self.isNumber(player1PayoffMatrix[row][column]):                        
                         if player1PayoffMatrix[row][column].startswith('-'):
-                            player1Payoff= -uP[player1PayoffMatrix[row][column]]
+                            player1Payoff= -uP[player1PayoffMatrix[row][column][1:]]
                         else:
                             player1Payoff=lP[player1PayoffMatrix[row][column]]
                 else:
@@ -207,7 +207,7 @@ class Game(object ):
                         
                 if not self.isNumber(player2PayoffMatrix[row][column]):                        
                         if player2PayoffMatrix[row][column].startswith('-'):
-                            player2Payoff= -uP[player2PayoffMatrix[row][column]]
+                            player2Payoff= -uP[player2PayoffMatrix[row][column][1:]]
                         else:
                             player2Payoff=lP[player2PayoffMatrix[row][column]]
                 else:
