@@ -12,13 +12,17 @@ class Game(object ):
     player2PayoffMatrix=""
     LowerPrevisionsDict=""
     UpperPrevisionsDict=""
+    player1MarginalUtils=""
+    player2MarginalUtils=""
     rows=0
     cols=0
-    def __init__(self, player1PayoffMatrix, player2PayoffMatrix, LowerPrevisionsDict=None, UpperPrevisionsDict=None):
+    def __init__(self, player1PayoffMatrix, player2PayoffMatrix, LowerPrevisionsDict=None, UpperPrevisionsDict=None, player1MarginalUtils=None, player2MarginalUtils=None):
         self.player1PayoffMatrix=player1PayoffMatrix
         self.player2PayoffMatrix=player2PayoffMatrix
         self.LowerPrevisionsDict=LowerPrevisionsDict
         self.UpperPrevisionsDict=UpperPrevisionsDict
+        self.player1MarginalUtils=player1MarginalUtils
+        self.player2MarginalUtils=player2MarginalUtils
         self.rows= int(len(player1PayoffMatrix))
         self.cols= int(len(player1PayoffMatrix[0])) 
         
@@ -64,40 +68,6 @@ class Game(object ):
               constraints[str(row)+str(column)]=0
         return constraints
 
-    def A_ineq_RiskAverse(self, P1_MarginalUtilitiesMatrix, P2_MarginalUtilitiesMatrix):
-        player1PayoffMatrix= self.player1PayoffMatrix
-        player2PayoffMatrix= self.player2PayoffMatrix
-        m=self.rows
-        n=self.cols
-        A=[]
-        
-        #Player 1 constraints
-        for row in range (m): 
-            for q in range (m):
-                if(row==q):
-                     continue
-                constraints=self.initConstraints()
-                for column in range(n):
-                    constraints[str(row)+str(column)]= (player1PayoffMatrix[row][column] - player1PayoffMatrix[q][column])/P1_MarginalUtilitiesMatrix[row][column]            
-                
-                A+=[list(constraints.values())]
-        
-        #Player 2 constraints
-        for column in range (m): 
-            for k in range (m):
-                if(column==k):
-                     continue
-                constraints=self.initConstraints()
-                for row in range(n):
-                    constraints[str(row)+str(column)]= (player2PayoffMatrix[row][column] - player2PayoffMatrix[row][k] )/P2_MarginalUtilitiesMatrix[row][column]            
-                A+=[list(constraints.values())] 
-        #x>=0 constraints
-        for row in range (m):    
-            for column in range(n):
-                constraints=self.initConstraints()
-                constraints[str(row)+str(column)]= 1
-                A+=[list(constraints.values())]
-        return np.array(A)
     
     def A_ineq(self):     
         return np.concatenate((self.CE_A_ineq(), self.identity_A_ineq()), axis=0)
@@ -140,7 +110,7 @@ class Game(object ):
                     else:
                         player1Payoffq=player1PayoffMatrix[q][column]
                    
-                    constraints[str(row)+str(column)]= float(player1Payoff) - float(player1Payoffq)             
+                    constraints[str(row)+str(column)]= (float(player1Payoff) - float(player1Payoffq))/(1 if self.player1MarginalUtils is None else self.player1MarginalUtils[row][column] )           
                     
                 A+=[list(constraints.values())]
         
@@ -168,7 +138,7 @@ class Game(object ):
                      else:
                         player2Payoffk=player2PayoffMatrix[row][k]
                         
-                     constraints[str(row)+str(column)]= float(player2Payoff) - float(player2Payoffk)             
+                     constraints[str(row)+str(column)]= (float(player2Payoff) - float(player2Payoffk))/ (1 if self.player2MarginalUtils  is None else self.player2MarginalUtils[row][column] )             
                 A+=[list(constraints.values())] 
         return np.array(A)
     
