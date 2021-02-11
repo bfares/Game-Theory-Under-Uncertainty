@@ -18,22 +18,26 @@ shapley_p1 = np.array( [[1,0,0], [0,1,0], [0,0,1]])
 shapley_p2 = np.array( [[0,1,0], [0,0,1], [1,0,0]])
 matchingPennies_p1_RiskAverse = np.array( [[0.293,-0.414], [-0.414,0.293]])
 matchingPennies_p2_RiskAverse = np.array( [[-0.414,0.293], [0.293,-0.414]])
+
+
+matchingPennies_p1_RiskNeutral = np.array( [[2,-1], [-1,2]])
+matchingPennies_p2_RiskNeutral = np.array( [[0,1], [1,0]])
 matchingPennies_p1_MarginalUtilities = np.array( [[0.245,0.49], [0.49,0.245]])
 matchingPennies_p2_MarginalUtilities = np.array( [[0.49,0.245], [0.245,0.49]])
 
-Thesis_Test_p1 = np.array( [[2,0], [0,1]])
+Thesis_Test_p1 = np.array( [['f',0], [0,1]])
 Thesis_Test_p2 = np.array( [[1,0], [0,2]])
 
-lP={'f':1.33}
-uP={'f':1.83}
+lP={'f':1}
+uP={'f':1.1}
+
 
 #cGame=Game(chicken_p1, chicken_p2)
 #cGame=Game(shapley_p1, shapley_p2)
-#cGame=Game(battleOfTheSexes_p1, battleOfTheSexes_p2)
-cGame=Game(Thesis_Test_p1, Thesis_Test_p2, lP, uP)
+cGame=Game(battleOfTheSexes_p1, battleOfTheSexes_p2)
+#cGame=Game(matchingPennies_p1_RiskAverse, matchingPennies_p2_RiskAverse, player1MarginalUtils=matchingPennies_p1_MarginalUtilities,player2MarginalUtils=matchingPennies_p2_MarginalUtilities )
+#cGame=Game(Thesis_Test_p1, Thesis_Test_p2, lP, uP)
 
-
-#ineq_A=cGame.A_ineq_RiskAverse(matchingPennies_p1_MarginalUtilities,matchingPennies_p2_MarginalUtilities)
 
 c=cGame.c()
 A_ineq= cGame.A_ineq()
