@@ -1,5 +1,8 @@
 # Game-Theory-Under-Uncertainty
 
+Author: Bernard Fares
+
+Abstract:
 Ignorance within game theory, reflected as uncertainty towards a game's outcome,
 is examined from a Bayesian point of view. We explore a solution concept that is
 based on recent statistical research in imprecise probabilities and de Finetti's common-
@@ -13,3 +16,4 @@ outcomes.
 This solution will return the set of corrlated equilibria and its polytope, given the provided lower and upper previsions of the uncertain outcome. 
 
 Please use Simulation.py for examples. More detailed documentation will be provided in the future.
+
